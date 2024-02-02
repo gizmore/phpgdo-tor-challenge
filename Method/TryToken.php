@@ -6,6 +6,7 @@ use GDO\Core\GDO_DBException;
 use GDO\Core\GDT;
 use GDO\Core\GDT_String;
 use GDO\Core\GDT_Token;
+use GDO\Core\GDT_UInt;
 use GDO\Core\MethodAjax;
 use GDO\User\GDO_User;
 use GDO\User\GDO_UserSetting;
@@ -28,7 +29,7 @@ final class TryToken extends MethodAjax
     {
         $result = 0;
         $token = $this->gdoParameterVar('token');
-        $user = GDO_UserSetting::table()->select('uset_user.*')->
+        $user = GDO_UserSetting::table()->select('uset_user_t.*')->
             joinObject('uset_user')->
             fetchTable(GDO_User::table())->
             where("uset_name='eigentor' AND uset_var='$token'")->
@@ -38,7 +39,7 @@ final class TryToken extends MethodAjax
             /**
              * @var GDO_User $user
              */
-            if ($user->settingVar('TorChallenge', 'eigentor'))
+            if ($user->settingVar('TorChallenge', 'eigentor_solved'))
             {
                 $result = 2;
             }
@@ -48,7 +49,7 @@ final class TryToken extends MethodAjax
                 $result = 1;
             }
         }
-        return GDT_String::make('status')->initial($result);
+        return GDT_UInt::make('status')->initial((string)$result);
     }
 
 }
