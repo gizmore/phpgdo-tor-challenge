@@ -41,7 +41,7 @@ final class Module_TorChallenge extends GDO_Module
     public function hookTorDetected(): void
     {
         $user = GDO_User::current();
-        if ($user->isMember())
+        if ($user->isUser())
         {
             $code = $user->settingVar('TorChallenge', 'eigentor');
             if (!$code)
